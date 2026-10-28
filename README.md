@@ -1,27 +1,10 @@
 # stream-schema
 
-Streaming JSON parser with incremental schema validation. Perfect for parsing LLM outputs token by token.
+[![npm](https://img.shields.io/npm/v/stream-schema)](https://www.npmjs.com/package/stream-schema)
 
-**[Live Demo](https://v0-llm-output-parser.vercel.app/)**
+Streaming JSON parser with incremental schema validation, built for parsing LLM output token by token.
 
-## The Problem
-
-When working with LLM outputs, you often receive JSON token by token:
-
-```
-{"na
-me": "Jo
-hn", "age": 3
-0}
-```
-
-Current solutions require you to either:
-- Wait for the complete JSON before parsing (bad UX - no incremental updates)
-- Use regex hacks (fragile and error-prone)
-
-## The Solution
-
-`stream-schema` parses JSON incrementally as it streams, validates against a JSON Schema, and emits partial results you can use to update your UI in real-time.
+**[Live demo](https://v0-llm-output-parser.vercel.app/)**
 
 ## Installation
 
@@ -36,7 +19,7 @@ pnpm add stream-schema
 npm install stream-schema
 ```
 
-## Quick Start
+## Quick start
 
 ```typescript
 import { createStreamParser } from 'stream-schema';
@@ -67,6 +50,25 @@ for await (const chunk of llmStream) {
   }
 }
 ```
+
+## The problem
+
+When working with LLM outputs, you often receive JSON token by token:
+
+```
+{"na
+me": "Jo
+hn", "age": 3
+0}
+```
+
+Current solutions require you to either:
+- Wait for the complete JSON before parsing (bad UX - no incremental updates)
+- Use regex hacks (fragile and error-prone)
+
+## The solution
+
+`stream-schema` parses JSON incrementally as it streams, validates against a JSON Schema, and emits partial results you can use to update your UI in real-time.
 
 ## Features
 
@@ -190,7 +192,7 @@ interface ParserOptions {
 }
 ```
 
-## Type Inference
+## Type inference
 
 `stream-schema` infers TypeScript types from your schema:
 
@@ -210,9 +212,9 @@ const result = parser.getResult();
 // result is typed as: { name: string; age?: number; tags?: string[] }
 ```
 
-## Advanced Usage
+## Advanced usage
 
-### Manual Tokenization
+### Manual tokenization
 
 For fine-grained control, use the tokenizer directly:
 
@@ -230,7 +232,7 @@ for (const token of tokens) {
 const partial = tokenizer.getPartialToken();
 ```
 
-### Schema Validation Only
+### Schema validation only
 
 Use the validator standalone:
 
@@ -248,7 +250,7 @@ const errors = validator.validate({ email: 'invalid' });
 // [{ path: ['email'], message: 'Invalid email format', ... }]
 ```
 
-## Supported JSON Schema Features
+## Supported JSON Schema features
 
 - Basic types: `string`, `number`, `integer`, `boolean`, `null`, `array`, `object`
 - `enum` and `const`
@@ -268,10 +270,22 @@ Benchmarks show that `stream-schema`:
 - Handles 10MB+ JSON files with reasonable memory usage
 - Is suitable for real-time streaming scenarios
 
+## Development
+
+```bash
+npm install
+npm test        # vitest
+npm run lint    # tsc --noEmit
+npm run build   # tsup, CJS + ESM + types
+node demo.js    # terminal demo (run after build)
+```
+
+A React demo component lives in [`examples/StreamSchemaDemo.tsx`](examples/StreamSchemaDemo.tsx).
+
 ## Author
 
 **Tyler Gibbs**
 
 ## License
 
-MIT
+MIT. See [LICENSE](LICENSE).
